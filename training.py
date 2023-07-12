@@ -13,9 +13,9 @@ def trainOnce(mileages, prices, oldTheta0, oldTheta1):
     for mileage, price in zip(mileages, prices):
         sum0 += estimatePrice(mileage, oldTheta0, oldTheta1) - price
         sum1 += (estimatePrice(mileage, oldTheta0, oldTheta1) - price) * mileage
-    newTheta0 = sum0 * LEARNING_RATE / size 
-    newTheta1 = sum1 * LEARNING_RATE / size
-    return newTheta0, newTheta1
+    delta0 = sum0 * LEARNING_RATE / size 
+    delta1 = sum1 * LEARNING_RATE / size
+    return oldTheta0 - delta0, oldTheta1 - delta1
 
 def training():
     try:
@@ -23,11 +23,10 @@ def training():
     except Exception as error:
         print("Exception: ", error)
         return;
-    theta0 = 0;
-    theta1 = 0;
+    theta0 = 0.0
+    theta1 = 0.0
     for i in range(GENERATIONS):
         newTheta0, newTheta1 = trainOnce(mileages, prices, theta0, theta1)
-        print(theta0, theta1)
         theta0 = newTheta0
         theta1 = newTheta1
     with open('theta.csv', 'w', newline='') as csvfile:
