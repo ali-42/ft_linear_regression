@@ -13,6 +13,10 @@ def getTheta():
                 raise Exception("values are not float")
     return theta0, theta1
 
+def deNormalizeValue(value, dataSet):
+    maxValue = max(dataSet)
+    minValue = min(dataSet)
+    return (maxValue - minValue) * value + minValue
 
 def normalizeData(dataSet, minValue, maxValue):
     normData = []
