@@ -13,6 +13,7 @@ def getTheta():
                 raise Exception("values are not float")
     return theta0, theta1
 
+# BAD
 def getDenormalizedTheta():
     mileages, prices = getData()
     maxMileage = max(mileages)
