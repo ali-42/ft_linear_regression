@@ -1,2 +1,0 @@
-normValue = (value - minValue) / (maxValue - minValue)
-value = normValue * (maxValue - minValue) + minValue
