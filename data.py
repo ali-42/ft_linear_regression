@@ -13,6 +13,22 @@ def getTheta():
                 raise Exception("values are not float")
     return theta0, theta1
 
+def getDenormalizedTheta():
+    mileages, prices = getData()
+    maxMileage = max(mileages)
+    minMileage = max(mileages)
+    maxPrice = max(prices)
+    minPrice = min(prices)
+    theta0, theta1 = getTheta()
+    deNormTheta0 =
+    deNormTheta1 =
+
+    return deNormTheta0, deNormTheta1
+
+def deNormalizeValue(value, maxValue, minValue):
+    return (maxValue - minValue) * value + minValue
+
+
 def normalizeData(dataSet, minValue, maxValue):
     normData = []
     if maxValue == minValue:
