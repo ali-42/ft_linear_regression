@@ -1,4 +1,4 @@
-from data import getDenormalizedTheta, getNormalizeData, estimatePrice
+from utils import getDenormalizedTheta, getNormalizeData, estimatePrice
 import csv
 
 def trainOnce(LEARNING_RATE, kilometrages, prices, oldTheta0, oldTheta1):

@@ -1,5 +1,5 @@
 from training import training
-from data import getTheta, getNormalizeData, estimatePrice
+from utils import getTheta, getNormalizeData, estimatePrice
 import numpy as np
 
 def squareResiduals(kilometrages, prices, theta0, theta1):
@@ -29,7 +29,7 @@ def checkAccuracy():
         return;
 
     R2 = accuracy(kilometrages, prices, theta0, theta1)
-    print("accuracy is " + str(int(accuracy(kilometrages, prices, theta0, theta1) * 100)) + "%")
+    print("accuracy of this model: " + str(int(accuracy(kilometrages, prices, theta0, theta1) * 100)) + "%")
 
     return R2
 
@@ -54,4 +54,6 @@ def minimizeError():
     print("minimizing errors at learning rate of", lrs[index], " and with", gens[index], " generations")
 
 if __name__ == "__main__":
+    # use this to get appropriate training parameters :
+    # minimizeError()
     checkAccuracy()

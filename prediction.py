@@ -1,10 +1,10 @@
 import sys
-from data import getData, getTheta, estimateRealPrice
+from utils import getData, getTheta, estimateRealPrice
 
 def getInput():
     while (1):
         try:
-            kilometrage = input("what's the kilometrage of the car?\n")
+            kilometrage = input("Input the kilometrage of the car:\n")
             kilometrage = float(kilometrage)
             if kilometrage < 0:
                 print("You must input a positive number")

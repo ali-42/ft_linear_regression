@@ -1,4 +1,4 @@
-from data import getData, getNormalizeData, getTheta, normalizeValue, getDenormalizedTheta
+from utils import getData, getNormalizeData, getTheta, normalizeValue, getDenormalizedTheta
 import matplotlib.pyplot as plt
 
 def plot(ax1, ax2, kilometrages, prices, normMileages, normPrices):
