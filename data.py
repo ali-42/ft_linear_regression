@@ -20,8 +20,9 @@ def getDenormalizedTheta():
     maxPrice = max(prices)
     minPrice = min(prices)
     theta0, theta1 = getTheta()
-    deNormTheta0 =
-    deNormTheta1 =
+    # BAD
+    deNormTheta0 = maxPrice * theta0
+    deNormTheta1 = maxPrice * theta1 / maxMileage
 
     return deNormTheta0, deNormTheta1
 
