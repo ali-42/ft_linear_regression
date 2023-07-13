@@ -21,7 +21,7 @@ def plot(ax1, ax2, kilometrages, prices, normMileages, normPrices):
 
 def vizualize():
     theta0, theta1 = getTheta()
-    if theta1 == 0 or theta0 == 0:
+    if theta1 == 0 and theta0 == 0:
         print("You have to run the training first")
         return
     try:

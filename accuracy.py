@@ -19,7 +19,7 @@ def accuracy(kilometrages, prices, theta0, theta1):
 
 def checkAccuracy():
     theta0, theta1 = getTheta()
-    if theta0 == 0 or theta1 == 0:
+    if theta0 == 0 and theta1 == 0:
         print("You have to run the training first")
         return
     try:

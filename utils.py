@@ -80,10 +80,18 @@ def isUniform(dataSet):
             return False
     return True
 
+def negativeValue(dataSet):
+    for data in dataSet:
+        if data < 0:
+            return True
+    return False
+
 def getNormalizeData():
     kilometrages, prices = getData()
     if len(kilometrages) != len(prices):
         raise Exception("csv file not valid")
+    if negativeValue(prices) or negativeValue(kilometrages):
+        raise Exception("negative values in the dataset, that does not make sense")
     if len(kilometrages) <= 1 or isUniform(kilometrages):
         raise Exception("not enough data, there must be at least data for two different kilometrages in the dataset")
     if isUniform(prices):
