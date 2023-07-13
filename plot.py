@@ -1,30 +1,40 @@
-from data import deNormalizeValue, getData, getNormalizeData, getTheta
+from data import getData, getNormalizeData, getTheta, normalizeValue, getDenormalizedTheta
 import matplotlib.pyplot as plt
 
-def plot(mileages, theta0, theta1):
-    mil, pri = getData()
-    x = [deNormalizeValue(0, min(mil), max(mil)), deNormalizeValue(max(mileages), min(mil), max(mil))]
-    y = [deNormalizeValue(theta0, min(pri), max(pri)), deNormalizeValue(theta1 * max(mileages) + theta0, min(pri), max(pri))]
-    plt.plot(x, y, 'r')
-    plt.scatter(mil, pri)
-    plt.show()
+def plot(ax1, ax2, kilometrages, prices, normMileages, normPrices):
+    theta0, theta1 = getTheta()
+    deNormTheta0, deNormTheta1 = getDenormalizedTheta(theta0, theta1)
 
-def normPlot(mileages, prices, theta0, theta1):
-    x = [0, max(mileages)]
-    y = [theta0, theta1 * max(mileages) + theta0]
-    plt.plot(x, y, 'r')
-    plt.scatter(mileages, prices)
-    plt.show()
+    ax1.scatter(normMileages, normPrices, label="data")
+    x = [normalizeValue(-deNormTheta0 / deNormTheta1, min(kilometrages), max(kilometrages)), normalizeValue(0, min(kilometrages), max(kilometrages))]
+    y = [normalizeValue(0, min(prices), max(prices)), normalizeValue(deNormTheta0, min(prices), max(prices))]
+    ax1.plot(x, y, 'r', label="linear regression")
+    ax1.set_title("Normalized values")
+    ax1.legend()
+
+    ax2.scatter(kilometrages, prices, label="data")
+    x = [-deNormTheta0 / deNormTheta1, 0]
+    y = [0, deNormTheta0]
+    ax2.plot(x, y, 'r', label="linear regression")
+    ax2.set_title("Denormalized values")
+    ax2.legend()
 
 def vizualize():
-    try:
-        mileages, prices = getNormalizeData()
-    except Exception as error:
-        print("Exception: ", error)
-        return
     theta0, theta1 = getTheta()
-    plot(mileages, theta0, theta1)
-    normPlot(mileages, prices, theta0, theta1)
+    if theta1 == 0 or theta0 == 0:
+        print("You have to run the training first")
+        return
+    try:
+        kilometrages, prices = getData()
+        normMileages, normPrices = getNormalizeData()
+    except Exception as error:
+        print("Exception:", error)
+        return
+    
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 7))
+    if plot(ax1, ax2, kilometrages, prices, normMileages, normPrices) == -1:
+        return
+    plt.show()
 
 if __name__ == '__main__':
     vizualize()

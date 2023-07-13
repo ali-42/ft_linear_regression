@@ -1,5 +1,14 @@
 import csv
 
+def estimatePrice(kilometrage, theta0, theta1):
+    return theta0 + theta1 * kilometrage
+
+def estimateRealPrice(kilometrage, kilometrages, prices, theta0, theta1):
+    kilometrage = normalizeValue(kilometrage, min(kilometrages), max(kilometrages))
+    price = estimatePrice(kilometrage, theta0, theta1)
+    return deNormalizeValue(price, min(prices), max(prices))
+
+
 def getTheta():
     with open('theta.csv', mode='r', newline='') as csvfile:
         theta0 = theta1 = 0
@@ -13,23 +22,15 @@ def getTheta():
                 raise Exception("values are not float")
     return theta0, theta1
 
-# BAD
-def getDenormalizedTheta():
-    mileages, prices = getData()
-    maxMileage = max(mileages)
-    minMileage = min(mileages)
-    maxPrice = max(prices)
-    minPrice = min(prices)
-    theta0, theta1 = getTheta()
+def getDenormalizedTheta(theta0, theta1):
+    kilometrages, prices = getData()
+    maxMileage = max(kilometrages)
 
-    deNormTheta0 = deNormalizeValue(theta0, minPrice, maxPrice)
-    y0 = deNormTheta0
-    x0 = deNormalizeValue(0, minMileage, maxMileage)
-    y1 = deNormalizeValue(theta0 + theta1, minPrice, maxPrice)
-    x1 = deNormalizeValue(1, minMileage, maxMileage)
-    deNormTheta1 = (y1 - y0) / (x1 - x0)
+    deNormtheta0 = estimateRealPrice(0, kilometrages, prices, theta0, theta1)
+    y1 = estimateRealPrice(maxMileage, kilometrages, prices, theta0, theta1)
+    deNormtheta1 = (y1 - deNormtheta0) / maxMileage
 
-    return deNormTheta0, deNormTheta1
+    return deNormtheta0, deNormtheta1
 
 def deNormalizeValue(value, minValue, maxValue):
     return value * (maxValue - minValue) + minValue
@@ -58,7 +59,7 @@ def deNormalizeData(dataSet, minValue, maxValue):
     return denormData
 
 def getData():
-    mileages = []
+    kilometrages = []
     prices = []
     with open('data.csv', newline='', mode='r') as csvfile:
         reader = csv.reader(csvfile, delimiter=' ')
@@ -66,33 +67,31 @@ def getData():
         for row in reader:
             values = row[0].split(',')
             try:
-                mileages.append(int(values[0]))
+                kilometrages.append(int(values[0]))
                 prices.append(int(values[1]))
             except ValueError:
-                raise Exception("some values are not numbers")
-    return mileages, prices
+                raise Exception("csv file not valid")
+    return kilometrages, prices
+
+def isUniform(dataSet):
+    data0 = dataSet[0]
+    for data in dataSet:
+        if data != data0:
+            return False
+    return True
 
 def getNormalizeData():
-    mileages, prices = getData()
-    if len(mileages) != len(prices):
+    kilometrages, prices = getData()
+    if len(kilometrages) != len(prices):
         raise Exception("csv file not valid")
-    if len(mileages) == 0:
-        raise Exception("no data")
-    minMileage = min(mileages)
-    maxMileage = max(mileages)
+    if len(kilometrages) <= 1 or isUniform(kilometrages):
+        raise Exception("not enough data, there must be at least data for two different kilometrages in the dataset")
+    if isUniform(prices):
+        raise Exception("constant price in dataset, case is trivial")
+    minMileage = min(kilometrages)
+    maxMileage = max(kilometrages)
     minPrice = min(prices)
     maxPrice = max(prices)
-    mileages = normalizeData(mileages, minMileage, maxMileage)
+    kilometrages = normalizeData(kilometrages, minMileage, maxMileage)
     prices = normalizeData(prices, minPrice, maxPrice)
-    return mileages, prices
-
-if __name__ == "__main__":
-    mileages, prices = getData()
-    normMileages, normPrices = getNormalizeData()
-    print("data = ", mileages, prices)
-    print()
-    print("normalized data = ", normMileages, normPrices)
-    print()
-    print("denormalized mileages = ", deNormalizeData(normMileages, min(mileages), max(mileages)))
-    print()
-    print("denormalized prices = ", deNormalizeData(normPrices, min(prices), max(prices)))
+    return kilometrages, prices

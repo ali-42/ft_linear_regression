@@ -1,33 +1,40 @@
-from training import estimatePrice
 import sys
-from data import deNormalizeValue, getData, getTheta, normalizeValue
+from data import getData, getTheta, estimateRealPrice
 
 def getInput():
     while (1):
         try:
-            mileage = input("what's the mileage of the car?\n")
-            mileage = float(mileage)
-            if mileage < 0:
+            kilometrage = input("what's the kilometrage of the car?\n")
+            kilometrage = float(kilometrage)
+            if kilometrage < 0:
                 print("You must input a positive number")
                 continue
-            return mileage
+            return kilometrage
         except EOFError:
             print("Exit")
             sys.exit()
         except ValueError:
             print("You must input a number")
 
+
 def predict():
+    try:
+        getData()
+    except Exception as error:
+        print("Exception:", error)
+        return
+
     theta0, theta1 = getTheta()
-    mileage = getInput()
-    mileages, prices = getData()
-    mileage = normalizeValue(mileage, min(mileages), max(mileages))
-    price = estimatePrice(mileage, theta0, theta1)
-    realPrice = int(deNormalizeValue(price, min(prices), max(prices)))
+    if theta0 == 0 or theta1 == 0:
+        print("You have to run the training first")
+        return 
+    kilometrage = getInput()
+    kilometrages, prices = getData()
+    realPrice = int(estimateRealPrice(kilometrage, kilometrages, prices, theta0, theta1))
     if realPrice <= 0:
         print("This car is not worth selling")
     else:
-        print("The estimate price is", realPrice, " euros")
+        print("The estimate price is", realPrice, "euros")
 
 if __name__ == "__main__":
     predict()
