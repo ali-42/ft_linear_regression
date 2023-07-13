@@ -26,9 +26,11 @@ def getDenormalizedTheta():
 
     return deNormTheta0, deNormTheta1
 
-def deNormalizeValue(value, maxValue, minValue):
-    return (maxValue - minValue) * value + minValue
+def deNormalizeValue(value, minValue, maxValue):
+    return value * (maxValue - minValue) + minValue
 
+def normalizeValue(value, minValue, maxValue):
+    return (value - minValue) / (maxValue - minValue)
 
 def normalizeData(dataSet, minValue, maxValue):
     normData = []
@@ -37,7 +39,7 @@ def normalizeData(dataSet, minValue, maxValue):
             normData.append(0.5)
     else:
         for data in dataSet:
-            normData.append((data - minValue) / (maxValue - minValue))
+            normData.append(normalizeValue(data, minValue, maxValue))
     return normData
 
 def deNormalizeData(dataSet, minValue, maxValue):
@@ -47,7 +49,7 @@ def deNormalizeData(dataSet, minValue, maxValue):
             denormData.append(minValue)
     else:
         for data in dataSet:
-            denormData.append((maxValue - minValue) * data + minValue)
+            denormData.append(deNormalizeValue(data, minValue, maxValue))
     return denormData
 
 def getData():
@@ -78,3 +80,14 @@ def getNormalizeData():
     mileages = normalizeData(mileages, minMileage, maxMileage)
     prices = normalizeData(prices, minPrice, maxPrice)
     return mileages, prices
+
+if __name__ == "__main__":
+    mileages, prices = getData()
+    normMileages, normPrices = getNormalizeData()
+    print("data = ", mileages, prices)
+    print()
+    print("normalized data = ", normMileages, normPrices)
+    print()
+    print("denormalized mileages = ", deNormalizeData(normMileages, min(mileages), max(mileages)))
+    print()
+    print("denormalized prices = ", deNormalizeData(normPrices, min(prices), max(prices)))

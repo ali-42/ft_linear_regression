@@ -1,6 +1,6 @@
 from training import estimatePrice
 import sys
-from data import getDenormalizedTheta
+from data import getData, getDenormalizedTheta, getTheta, normalizeValue
 
 def getInput():
     while (1):
@@ -18,8 +18,10 @@ def getInput():
             print("You must input a number")
 
 def predict():
-    theta0, theta1 = getDenormalizedTheta()
+    theta0, theta1 = getTheta()
     mileage = getInput()
+    mileages, prices = getData()
+    mileage = normalizeValue(mileage, min(mileages), max(mileages))
     price = estimatePrice(mileage, theta0, theta1)
     if price <= 0:
         print("This car is not worth selling")
