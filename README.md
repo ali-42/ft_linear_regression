@@ -1,4 +1,4 @@
-# ft_linear_regression
+# ft_linear_regression (42 project)
 
 Implementation in python of a gradient descent alogrithm to perform linear regression from a set of data
 
