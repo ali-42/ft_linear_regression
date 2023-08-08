@@ -8,3 +8,5 @@ Implementation in python of a gradient descent alogrithm to perform linear regre
 - `python plot.py` plots the results
 - `python accuracy.py` checks the accuracy of the model
 - `python prediction.py` gives predictions
+
+![screenshot](img/screenshot.png)
